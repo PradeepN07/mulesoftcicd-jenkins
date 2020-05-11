@@ -4,8 +4,8 @@ pipeline {
   environment {
     //adding a comment for the commit test
     DEPLOY_CREDS = credentials('deploy-anypoint-user')
-    MULE_VERSION = '4.1.4'
-    BG = "Pradeep"
+    MULE_VERSION = '4.3.0'
+    BG = "Netrovert\\Pradeep"
     WORKER = "Micro"
   }
   stages {
