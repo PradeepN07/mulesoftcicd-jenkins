@@ -89,7 +89,7 @@ pipeline {
           }
         }
     }
-
+}
    
   tools {
     maven 'M3'
