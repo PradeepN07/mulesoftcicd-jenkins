@@ -37,6 +37,7 @@
 						<applicationName>${cloudhub.app}</applicationName>
 						<businessGroup>${cloudhub.bg}</businessGroup>
 						<workerType>${cloudhub.worker}</workerType>
+						<objectStoreV2>true</objectStoreV2>
 						<!-- Everything that is between the properties tag, will be injected 
 							into the project as properties -->
 						<properties>
