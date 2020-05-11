@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mule xmlns:dw="http://www.mulesoft.org/schema/mule/ee/dw" xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:file="http://www.mulesoft.org/schema/mule/file" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+xmlns:spring="http://www.springframework.org/schema/beans" 
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-current.xsd
+http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/file http://www.mulesoft.org/schema/mule/file/current/mule-file.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/dw http://www.mulesoft.org/schema/mule/ee/dw/current/dw.xsd">
+    <file:connector name="SequentialFile" autoDelete="true" outputAppend="true" streaming="true" validateConnections="true" doc:name="File"/>
+    <flow name="sequential-file-peocessingFlow" processingStrategy="synchronous">
+        <file:inbound-endpoint path="src/main/resources/input" connector-ref="SequentialFile" responseTimeout="10000" comparator="com.file.FilenameComparator" doc:name="File">
+            <file:filename-regex-filter pattern="^.*\.txt$" caseSensitive="true"/>
+        </file:inbound-endpoint>
+        <logger message="*********#[message.inboundProperties.originalFilename]" level="INFO" doc:name="Logger"/>
+        <dw:transform-message doc:name="Transform Message">
+            <dw:set-payload><![CDATA[%dw 1.0
+%output application/json
+---
+{
+	Customers: payload.ns0#Root.ns0#Customers.*ns0#Customer map ( customer , indexOfCustomer ) -> {
+		Customer: {
+			CompanyName: customer.ns0#CompanyName,
+			ContactName: customer.ns0#ContactName,
+			ContactTitle: customer.ns0#ContactTitle,
+			Phone: customer.ns0#Phone,
+			FullAddress: {
+				Address: customer.ns0#FullAddress.ns0#Address,
+				City: customer.ns0#FullAddress.ns0#City,
+				Region: customer.ns0#FullAddress.ns0#Region,
+				PostalCode: customer.ns0#FullAddress.ns0#PostalCode as String,
+				Country: customer.ns0#FullAddress.ns0#Country
+			}
+		}
+	}
+}]]></dw:set-payload>
+        </dw:transform-message>
+        <choice doc:name="Choice">
+            <when expression="#[payload.]">
+                <dw:transform-message doc:name="Transform Message">
+                    <dw:set-payload><![CDATA[%dw 1.0
+%output application/java
+---
+{
+}]]></dw:set-payload>
+                </dw:transform-message>
+            </when>
+        </choice>
+        <file:outbound-endpoint path="src/main/resources/output"  connector-ref="SequentialFile" responseTimeout="10000" doc:name="File"/>
+    </flow>
+</mule>
