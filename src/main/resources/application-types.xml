@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<types:mule xmlns:types="http://www.mulesoft.org/schema/mule/types">
+  <types:catalog>
+    <types:type name="output" format="json">
+      <types:example format="json" location="examples/or-orders.json"/>
+    </types:type>
+    <types:type name="input" format="json">
+      <types:example format="json" location="examples/orders.json"/>
+    </types:type>
+    <types:type name="xml-data" format="xml">
+      <types:example format="xml" element="{http://www.adventure-works.com}Root" location="input/Orders0.xml"/>
+    </types:type>
+  </types:catalog>
+  <types:enrichment select="#1ecd0508-6571-462b-9739-1d045145dac1">
+    <types:processor-declaration>
+      <types:output-event>
+        <types:message>
+          <types:payload type="output"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+  <types:enrichment select="#7dfa1d25-aee7-4ae9-82b5-d7d2f8971693">
+    <types:processor-declaration>
+      <types:input-event>
+        <types:message>
+          <types:payload type="xml-data"/>
+        </types:message>
+      </types:input-event>
+      <types:output-event>
+        <types:message>
+          <types:payload type="input"/>
+        </types:message>
+      </types:output-event>
+    </types:processor-declaration>
+  </types:enrichment>
+</types:mule>
