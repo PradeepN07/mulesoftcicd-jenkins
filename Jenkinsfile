@@ -27,18 +27,10 @@ pipeline {
         APP_NAME = 'mulesoftcicd-dev'
       }
       steps {
-            bat 'mvn -U -V -e -B -DskipTests deploy -DmuleDeploy -Dmule.version="%MULE_VERSION%" -Danypoint.username="%DEPLOY_CREDS_USR%" -Danypoint.password="%DEPLOY_CREDS_PSW%" -Dcloudhub.app="%APP_NAME%" -Dcloudhub.environment="%ENVIRONMENT%" -Dcloudhub.bg="%BG%" -Dcloudhub.worker="%WORKER%"'
+            bat 'mvn -U -V -e -B -DskipTests deploy -DmuleDeploy -Dmule.version="4.3.0" -Danypoint.username="Pradeep_Kumar" -Danypoint.password="Deepu@1982" -Dcloudhub.app="muleCICD-dev" -Dcloudhub.environment="Sandbox" -Dcloudhub.bg="Pradeep" -Dcloudhub.worker="Micro"'
       }
     }
-    stage('Deploy Production') {
-      environment {
-        ENVIRONMENT = 'Production'
-        APP_NAME = 'mulesoftcicd-prd'
-      }
-      steps {
-            bat 'mvn -U -V -e -B -DskipTests deploy -DmuleDeploy -Dmule.version="%MULE_VERSION%" -Danypoint.username="%DEPLOY_CREDS_USR%" -Danypoint.password="%DEPLOY_CREDS_PSW%" -Dcloudhub.app="%APP_NAME%" -Dcloudhub.environment="%ENVIRONMENT%" -Dcloudhub.bg="%BG%" -Dcloudhub.worker="%WORKER%"'
-      }
-    }
+    
   }
 
   tools {
