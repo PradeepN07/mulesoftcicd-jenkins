@@ -50,26 +50,26 @@ pipeline {
         
 echo "Test succeeded"
             script {
-            mail(bcc: '',
+             mail(bcc: '',
                      body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                     cc: '',
+                     cc: 'Pradeep.Kumar@netrovert.net',
                      from: 'jenkins-admin@gmail.com',
                      replyTo: '',
                      subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
-                     to: env.notification_email)
+                     to: 'Pradeep.N2019@gmail.com')
                     
                       
         }
         }
         failure {
             echo "Test failed"
-            mail(bcc: '',
-                body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                 cc: '',
-                 from: 'jenkins-admin@gmail.com',
-                 replyTo: '',
-                 subject: "${JOB_NAME} ${BUILD_NUMBER} failed",
-                 to: env.notification_email)
+             mail(bcc: '',
+                     body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
+                     cc: 'Pradeep.Kumar@netrovert.net',
+                     from: 'jenkins-admin@gmail.com',
+                     replyTo: '',
+                     subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
+                     to: 'Pradeep.N2019@gmail.com')
               
         }
     }
