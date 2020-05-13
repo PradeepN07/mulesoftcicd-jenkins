@@ -6,7 +6,7 @@ pipeline {
     MULE_VERSION = '4.3.0'
     BG = "Netrovert Softwares"
     WORKER = "Micro"
-
+ BRANCH_NAME="master"
     APPNAME = "mule-cicd"
 
     DEPLOY_BAT = "true"
@@ -77,7 +77,6 @@ def notifyBuild(String buildStatus = 'STARTED') {
     // build status of null means successful
     buildStatus = buildStatus ?: 'SUCCESS'
 
-    def branchName = getCurrentBranch()
     def shortCommitHash = getShortCommitHash()
     def changeAuthorName = getChangeAuthorName()
     def changeAuthorEmail = getChangeAuthorEmail()
