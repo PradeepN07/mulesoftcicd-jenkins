@@ -97,5 +97,5 @@ def sendEmail(status) {
             body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n",
 			cc: 'Pradeep.Kumar@netrovert.net',
             from: 'jenkins-admin@gmail.com',
-            replyTo: ''
+            replyTo: '')
 }
