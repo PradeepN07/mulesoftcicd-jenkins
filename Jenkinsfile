@@ -29,7 +29,7 @@ pipeline {
      stage('Deploy Development') {
       environment {
         ENVIRONMENT = 'Sandbox'
-        APP_NAME =dev-mule-cicd
+        APP_NAME = 'dev-mule-cicd'
 		
       }
       steps {
