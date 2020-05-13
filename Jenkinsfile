@@ -44,7 +44,7 @@ pipeline {
   }
   post {
         success {
-        {
+        
 echo "Test succeeded"
             script {
             mail(bcc: '',
