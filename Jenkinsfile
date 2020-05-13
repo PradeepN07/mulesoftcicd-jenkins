@@ -1,5 +1,8 @@
 pipeline {
   agent any
+  parameters {
+        string(defaultValue: "Pradeep.N2019@gmail.com", description: 'email for notifications', name: 'notification_email')
+    }
   environment {
     DEPLOY_CREDS = credentials('deploy-anypoint-user')
     MULE_VERSION = '4.3.0'
