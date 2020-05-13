@@ -1,8 +1,6 @@
 pipeline {
   agent any
-  parameters {
-        string(defaultValue: "Pradeep.N2019@gmail.com", description: 'email for notifications', name: 'notification_email')
-    }
+ 
   environment {
     DEPLOY_CREDS = credentials('deploy-anypoint-user')
     MULE_VERSION = '4.3.0'
@@ -84,10 +82,10 @@ def getChangeString() {
 
 def sendEmail(status) {
    mail(bcc: '',
-                     body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n",
+                     body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
                      cc: 'Pradeep.Kumar@netrovert.net',
                      from: 'jenkins-admin@gmail.com',
                      replyTo: '',
                      subject: "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})",
-                     to: 'Pradeep.N2019@gmail.com')
+                     to: '$EMAIL_RECIPIENTS')
 }
