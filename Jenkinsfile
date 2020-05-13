@@ -76,13 +76,6 @@ def sendEmail(status) {
 def notifyBuild(String buildStatus = 'STARTED') {
     // build status of null means successful
     buildStatus = buildStatus ?: 'SUCCESS'
-
-    def shortCommitHash = getShortCommitHash()
-    def changeAuthorName = getChangeAuthorName()
-    def changeAuthorEmail = getChangeAuthorEmail()
-    def changeSet = getChangeSet()
-    def changeLog = getChangeLog()
-
     // Default values
     def colorName = 'RED'
     def colorCode = '#FF0000'
@@ -90,11 +83,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
     def summary = "Started: Name:: ${env.JOB_NAME} \n " +
             "Build Number: ${env.BUILD_NUMBER} \n " +
             "Build URL: ${env.BUILD_URL} \n " +
-            "Short Commit Hash: " + shortCommitHash + " \n " +
-            "Branch Name: " + branchName + " \n " +
-            "Change Author: " + changeAuthorName + " \n " +
-            "Change Author Email: " + changeAuthorEmail + " \n " +
-            "Change Set: " + changeSet
+           
 
     if (buildStatus == 'STARTED') {
         color = 'YELLOW'
@@ -108,44 +97,15 @@ def notifyBuild(String buildStatus = 'STARTED') {
     }
 
     // Send notifications
-    hipchatSend(color: color, notify: true, message: summary, token: "${env.HIPCHAT_TOKEN}",
-        failOnError: true, room: "${env.HIPCHAT_ROOM}", sendAs: 'Jenkins', textFormat: true)
-if (buildStatus == 'FAILURE') {
-        emailext attachLog: true, body: summary, compressLog: true, recipientProviders: [brokenTestsSuspects(), brokenBuildSuspects(), culprits()], replyTo: 'noreply@yourdomain.com', subject: subject, to: 'Pradeep.N2019@gmail'
-    }
-}
-def keepThisBuild() {
-    currentBuild.setKeepLog(true)
-    currentBuild.setDescription("Test Description")
-}
-
-def getShortCommitHash() {
-    return bat(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+	 mail(bcc: '',
+                     body: summary,
+                     cc: 'Pradeep.Kumar@netrovert.net',
+                     from: 'jenkins-admin@gmail.com',
+                     replyTo: '',
+                     subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
+                     to: 'Pradeep.N2019@gmail.com')
+					 
+    
 }
 
-def getChangeAuthorName() {
-    return bat(returnStdout: true, script: "git show -s --pretty=%an").trim()
-}
 
-def getChangeAuthorEmail() {
-    return bat(returnStdout: true, script: "git show -s --pretty=%ae").trim()
-}
-
-def getChangeSet() {
-    return bat(returnStdout: true, script: 'git diff-tree --no-commit-id --name-status -r HEAD').trim()
-}
-
-def getChangeLog() {
-    return bat(returnStdout: true, script: "git log --date=short --pretty=format:'%ad %aN <%ae> %n%n%x09* %s%d%n%b'").trim()
-}
-
-def getCurrentBranch () {
-    return bat (
-            script: 'git rev-parse --abbrev-ref HEAD',
-            returnStdout: true
-    ).trim()
-}
-
-def isPRMergeBuild() {
-    return (env.BRANCH_NAME ==~ /^PR-\d+$/)
-}
