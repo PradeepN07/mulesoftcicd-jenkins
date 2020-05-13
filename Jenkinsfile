@@ -12,6 +12,8 @@ pipeline {
     APPNAME = "mule-cicd"
 
     DEPLOY_BAT = "true"
+	EMAIL_RECIPIENTS = 'Pradeep.N2019@gmail'
+
   }
   stages {
     stage('Build') {
@@ -46,33 +48,27 @@ pipeline {
     }
   }
   post {
-        success {
-        
-echo "Test succeeded"
-            script {
-             mail(bcc: '',
-                     body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                     cc: 'Pradeep.Kumar@netrovert.net',
-                     from: 'jenkins-admin@gmail.com',
-                     replyTo: '',
-                     subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
-                     to: 'Pradeep.N2019@gmail.com')
-                    
-                      
+        // Always runs. And it runs before any of the other post conditions.
+        always {
+            // Let's wipe out the workspace before we finish!
+            deleteDir()
         }
+        success {
+            sendEmail("Successful");
+        }
+        unstable {
+            sendEmail("Unstable");
         }
         failure {
-            echo "Test failed"
-             mail(bcc: '',
-                     body: "Run ${JOB_NAME}-#${BUILD_NUMBER} succeeded. To get more details, visit the build results page: ${BUILD_URL}.",
-                     cc: 'Pradeep.Kumar@netrovert.net',
-                     from: 'jenkins-admin@gmail.com',
-                     replyTo: '',
-                     subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
-                     to: 'Pradeep.N2019@gmail.com')
-              
+            sendEmail("Failed");
         }
     }
+	def sendEmail(status) {
+    mail(
+            to: "$EMAIL_RECIPIENTS",
+            subject: "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})",
+            body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n")
+}
 
   tools {
     maven 'M3'
