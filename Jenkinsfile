@@ -79,22 +79,13 @@ def notifyBuild(String buildStatus = 'STARTED') {
     // Default values
     def colorName = 'RED'
     def colorCode = '#FF0000'
-    def subject = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'" + branchName + ", " + shortCommitHash
+    def subject = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'" 
     def summary = "Started: Name:: ${env.JOB_NAME} \n " +
             "Build Number: ${env.BUILD_NUMBER} \n " +
             "Build URL: ${env.BUILD_URL} \n " +
            
 
-    if (buildStatus == 'STARTED') {
-        color = 'YELLOW'
-        colorCode = '#FFFF00'
-    } else if (buildStatus == 'SUCCESS') {
-        color = 'GREEN'
-        colorCode = '#00FF00'
-    } else {
-        color = 'RED'
-        colorCode = '#FF0000'
-    }
+   
 
     // Send notifications
 	 mail(bcc: '',
