@@ -29,7 +29,8 @@ pipeline {
      stage('Deploy Development') {
       environment {
         ENVIRONMENT = 'Sandbox'
-        APP_NAME = 'dev-mule-cicd'
+        APP_NAME =dev-$APPNAME
+		
       }
       steps {
             bat 'mvn -U -V -e -B -DskipTests deploy -DmuleDeploy -Dmule.version="%MULE_VERSION%" -Danypoint.username="%DEPLOY_CREDS_USR%" -Danypoint.password="%DEPLOY_CREDS_PSW%" -Dcloudhub.app="%APP_NAME%" -Dcloudhub.environment="%ENVIRONMENT%" -Dcloudhub.bg="%BG%" -Dcloudhub.worker="%WORKER%"'
@@ -59,26 +60,7 @@ pipeline {
     maven 'M3'
   }
 }
-def getChangeString() {
-    MAX_MSG_LEN = 100
-    def changeString = ""
 
-    echo "Gathering SCM changes"
-    def changeLogSets = currentBuild.changeSets
-    for (int i = 0; i < changeLogSets.size(); i++) {
-        def entries = changeLogSets[i].items
-        for (int j = 0; j < entries.length; j++) {
-            def entry = entries[j]
-            truncated_msg = entry.msg.take(MAX_MSG_LEN)
-            changeString += " - ${truncated_msg} [${entry.author}]\n"
-        }
-    }
-
-    if (!changeString) {
-        changeString = " - No new changes"
-    }
-    return changeString
-}
 
 def sendEmail(status) {
    mail(bcc: '',
