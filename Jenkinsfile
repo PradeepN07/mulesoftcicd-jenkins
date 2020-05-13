@@ -112,7 +112,7 @@ def notifyBuild(String buildStatus = 'STARTED') {
     hipchatSend(color: color, notify: true, message: summary, token: "${env.HIPCHAT_TOKEN}",
         failOnError: true, room: "${env.HIPCHAT_ROOM}", sendAs: 'Jenkins', textFormat: true)
 if (buildStatus == 'FAILURE') {
-        emailext attachLog: true, body: summary, compressLog: true, recipientProviders: [brokenTestsSuspects(), brokenBuildSuspects(), culprits()], replyTo: 'noreply@yourdomain.com', subject: subject, to: 'mpatel@yourdomain.com'
+        emailext attachLog: true, body: summary, compressLog: true, recipientProviders: [brokenTestsSuspects(), brokenBuildSuspects(), culprits()], replyTo: 'noreply@yourdomain.com', subject: subject, to: 'Pradeep.N2019@gmail'
     }
 }
 def keepThisBuild() {
@@ -121,27 +121,27 @@ def keepThisBuild() {
 }
 
 def getShortCommitHash() {
-    return sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+    return bat(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
 }
 
 def getChangeAuthorName() {
-    return sh(returnStdout: true, script: "git show -s --pretty=%an").trim()
+    return bat(returnStdout: true, script: "git show -s --pretty=%an").trim()
 }
 
 def getChangeAuthorEmail() {
-    return sh(returnStdout: true, script: "git show -s --pretty=%ae").trim()
+    return bat(returnStdout: true, script: "git show -s --pretty=%ae").trim()
 }
 
 def getChangeSet() {
-    return sh(returnStdout: true, script: 'git diff-tree --no-commit-id --name-status -r HEAD').trim()
+    return bat(returnStdout: true, script: 'git diff-tree --no-commit-id --name-status -r HEAD').trim()
 }
 
 def getChangeLog() {
-    return sh(returnStdout: true, script: "git log --date=short --pretty=format:'%ad %aN <%ae> %n%n%x09* %s%d%n%b'").trim()
+    return bat(returnStdout: true, script: "git log --date=short --pretty=format:'%ad %aN <%ae> %n%n%x09* %s%d%n%b'").trim()
 }
 
 def getCurrentBranch () {
-    return sh (
+    return bat (
             script: 'git rev-parse --abbrev-ref HEAD',
             returnStdout: true
     ).trim()
