@@ -80,20 +80,18 @@ def notifyBuild(String buildStatus = 'STARTED') {
     def colorName = 'RED'
     def colorCode = '#FF0000'
     def subject = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'" 
-    def summary = "Started: Name:: ${env.JOB_NAME} \n " +
-            "Build Number: ${env.BUILD_NUMBER} \n " +
-            "Build URL: ${env.BUILD_URL} \n " +
-           
-
+   
    
 
     // Send notifications
 	 mail(bcc: '',
-                     body: summary,
+                     body: "Started: Name:: ${env.JOB_NAME} \n " +
+            "Build Number: ${env.BUILD_NUMBER} \n " +
+            "Build URL: ${env.BUILD_URL} \n ",
                      cc: 'Pradeep.Kumar@netrovert.net',
                      from: 'jenkins-admin@gmail.com',
                      replyTo: '',
-                     subject: "${JOB_NAME} ${BUILD_NUMBER} succeeded",
+                     subject: "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                      to: 'Pradeep.N2019@gmail.com')
 					 
     
