@@ -80,18 +80,18 @@ def notifyBuild(String buildStatus = 'STARTED') {
     def colorName = 'RED'
     def colorCode = '#FF0000'
     def subject = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'" 
-   
-   
+	
+  
 
     // Send notifications
 	 mail(bcc: '',
-                     body: "Started: Name:: ${env.JOB_NAME} \n " +
+                     body: "The jenkins CICD Pipeline executed with status ${buildStatus} and the Build Name:: ${env.JOB_NAME} \n " +
             "Build Number: ${env.BUILD_NUMBER} \n " +
             "Build URL: ${env.BUILD_URL} \n ",
                      cc: 'Pradeep.Kumar@netrovert.net',
                      from: 'jenkins-admin@gmail.com',
                      replyTo: '',
-                     subject: "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
+                     subject: "Jenkins Job Exceuted With Status ${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'",
                      to: 'Pradeep.N2019@gmail.com')
 					 
     
