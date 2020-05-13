@@ -29,7 +29,7 @@ pipeline {
      stage('Deploy Development') {
       environment {
         ENVIRONMENT = 'Sandbox'
-        APP_NAME =dev-$APPNAME
+        APP_NAME =dev-mule-cicd
 		
       }
       steps {
@@ -45,7 +45,8 @@ pipeline {
             deleteDir()
         }
         success {
-            sendEmail("Successful");
+           notifyBuild("${currentBuild.currentResult}")
+
         }
         unstable {
             sendEmail("Unstable");
@@ -70,4 +71,47 @@ def sendEmail(status) {
                      replyTo: '',
                      subject: "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})",
                      to: '$EMAIL_RECIPIENTS')
+}
+
+def notifyBuild(String buildStatus = 'STARTED') {
+    // build status of null means successful
+    buildStatus = buildStatus ?: 'SUCCESS'
+
+    def branchName = getCurrentBranch()
+    def shortCommitHash = getShortCommitHash()
+    def changeAuthorName = getChangeAuthorName()
+    def changeAuthorEmail = getChangeAuthorEmail()
+    def changeSet = getChangeSet()
+    def changeLog = getChangeLog()
+
+    // Default values
+    def colorName = 'RED'
+    def colorCode = '#FF0000'
+    def subject = "${buildStatus}: '${env.JOB_NAME} [${env.BUILD_NUMBER}]'" + branchName + ", " + shortCommitHash
+    def summary = "Started: Name:: ${env.JOB_NAME} \n " +
+            "Build Number: ${env.BUILD_NUMBER} \n " +
+            "Build URL: ${env.BUILD_URL} \n " +
+            "Short Commit Hash: " + shortCommitHash + " \n " +
+            "Branch Name: " + branchName + " \n " +
+            "Change Author: " + changeAuthorName + " \n " +
+            "Change Author Email: " + changeAuthorEmail + " \n " +
+            "Change Set: " + changeSet
+
+    if (buildStatus == 'STARTED') {
+        color = 'YELLOW'
+        colorCode = '#FFFF00'
+    } else if (buildStatus == 'SUCCESS') {
+        color = 'GREEN'
+        colorCode = '#00FF00'
+    } else {
+        color = 'RED'
+        colorCode = '#FF0000'
+    }
+
+    // Send notifications
+    hipchatSend(color: color, notify: true, message: summary, token: "${env.HIPCHAT_TOKEN}",
+        failOnError: true, room: "${env.HIPCHAT_ROOM}", sendAs: 'Jenkins', textFormat: true)
+if (buildStatus == 'FAILURE') {
+        emailext attachLog: true, body: summary, compressLog: true, recipientProviders: [brokenTestsSuspects(), brokenBuildSuspects(), culprits()], replyTo: 'noreply@yourdomain.com', subject: subject, to: 'mpatel@yourdomain.com'
+    }
 }
