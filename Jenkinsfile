@@ -3,7 +3,7 @@ pipeline {
   environment {
     DEPLOY_CREDS = credentials('deploy-anypoint-user')
     MULE_VERSION = '4.3.0'
-    BG = "Netrovert Softwares"
+    BG = "Netrovert Softwares//Pradeep"
     WORKER = "Micro"
 
     APPNAME = "mule-cicd"

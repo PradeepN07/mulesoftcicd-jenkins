@@ -24,6 +24,7 @@
 				<artifactId>mule-maven-plugin</artifactId>
 				<version>${mule.maven.plugin.version}</version>
 				<extensions>true</extensions>
+				<objectStoreV2>true</objectStoreV2>
 				<configuration>
 					<classifier>mule-application</classifier>
 					<cloudHubDeployment>
