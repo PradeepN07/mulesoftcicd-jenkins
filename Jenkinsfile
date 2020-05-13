@@ -37,15 +37,7 @@ pipeline {
             bat 'mvn -U -V -e -B -DskipTests deploy -DmuleDeploy -Dmule.version="%MULE_VERSION%" -Danypoint.username="%DEPLOY_CREDS_USR%" -Danypoint.password="%DEPLOY_CREDS_PSW%" -Dcloudhub.app="%APP_NAME%" -Dcloudhub.environment="%ENVIRONMENT%" -Dcloudhub.bg="%BG%" -Dcloudhub.worker="%WORKER%"'
       }
     }
-    stage('Deploy Production') {
-      environment {
-        ENVIRONMENT = 'Production'
-        APP_NAME = 'pr-mule-cicd'
-      }
-      steps {
-            bat 'mvn -U -V -e -B -DskipTests deploy -DmuleDeploy -Dmule.version="%MULE_VERSION%" -Danypoint.username="%DEPLOY_CREDS_USR%" -Danypoint.password="%DEPLOY_CREDS_PSW%" -Dcloudhub.app="%APP_NAME%" -Dcloudhub.environment="%ENVIRONMENT%" -Dcloudhub.bg="%BG%" -Dcloudhub.worker="%WORKER%"'
-      }
-    }
+    
   }
   post {
         // Always runs. And it runs before any of the other post conditions.
@@ -91,11 +83,11 @@ def getChangeString() {
 }
 
 def sendEmail(status) {
-    mail(
-            to: "$EMAIL_RECIPIENTS",
-            subject: "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})",
-            body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n",
-			cc: 'Pradeep.Kumar@netrovert.net',
-            from: 'jenkins-admin@gmail.com',
-            replyTo: '')
+   mail(bcc: '',
+                     body: "Changes:\n " + getChangeString() + "\n\n Check console output at: $BUILD_URL/console" + "\n",
+                     cc: 'Pradeep.Kumar@netrovert.net',
+                     from: 'jenkins-admin@gmail.com',
+                     replyTo: '',
+                     subject: "Build $BUILD_NUMBER - " + status + " (${currentBuild.fullDisplayName})",
+                     to: 'Pradeep.N2019@gmail.com')
 }
