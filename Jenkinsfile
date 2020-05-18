@@ -6,7 +6,7 @@ pipeline {
     MULE_VERSION = '4.3.0'
     BG = "Netrovert Softwares"
     WORKER = "Micro"
- BRANCH_NAME="master"
+    BRANCH_NAME="master"
     APPNAME = "mule-cicd"
 
     DEPLOY_BAT = "true"

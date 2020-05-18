@@ -29,13 +29,13 @@
 					<classifier>mule-application</classifier>
 					<cloudHubDeployment>
 						<uri>https://anypoint.mulesoft.com</uri>
-						<muleVersion>${mule.version}</muleVersion>
+						<muleVersion>4.3.0</muleVersion>
 						<!-- Deploy User Parameter -->
 						<username>${anypoint.username}</username>
 						<password>${anypoint.password}</password>
 						<!-- Environment Parameter -->
 						<environment>${cloudhub.environment}</environment>
-						<applicationName>${cloudhub.app}</applicationName>
+						<applicationName>mule-cicd</applicationName>
 						<businessGroup>${cloudhub.bg}</businessGroup>
 						<workerType>${cloudhub.worker}</workerType>
 						<objectStoreV2>true</objectStoreV2>
